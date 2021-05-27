@@ -148,6 +148,6 @@ class OpisTransakcjiEntity:
             'Numer karty' : ('Numer_karty',),
             'Numer referencyjny' : ('Nr_referencyjny',),
             'Adres nadawcy' : ('Adres_nadawcy',),
-            'Adres_odbiorcy' : ('Adres_odbiorcy',),
+            'Adres odbiorcy' : ('Adres_odbiorcy',),
             'Operacja' : ('Operacja',)
     }
