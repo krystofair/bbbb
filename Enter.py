@@ -9,16 +9,19 @@ mdbc.SetPassword() # podaj haslo do bazy
 
 
 def parse(filename):
+    """
+    " Parse csv file for format, which is simple to process futher.
+    """
 
+    # Read only first line and remove four last field, because there is empty fields.
     with open(filename, "r") as csv_file:
         line = csv_file.readline()
         fields = line.split(',')
-        pass
-
     fields = fields[:-4]
     fields = [x.strip('"') for x in fields]
     fields.pop()
 
+    # Process file futher.
     with open(filename, "r") as CSV_All:
         rrr = csv.DictReader(CSV_All, fieldnames=fields, restkey='Opis transakcji', dialect='unix', delimiter=',', quoting=csv.QUOTE_NONE, escapechar='\\', doublequote=True, quotechar='"')
         data = []

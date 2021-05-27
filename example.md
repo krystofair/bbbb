@@ -23,6 +23,3 @@
     ]
 }
 ```
-
-* połączyć pola przy oryginalnej kwoty transakcji
-* napisać funkcję sprawdzającą każde możliwe pole

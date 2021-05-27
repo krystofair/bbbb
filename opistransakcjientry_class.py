@@ -5,6 +5,8 @@ import regex
 from mysqlx import errors
 from transakcjaentry_class import TransakcjaEntity as Tre
 
+import pdb
+
 class OpisTransakcjiEntity:
 
     def __init__(self, ot_list, db):
@@ -20,10 +22,18 @@ class OpisTransakcjiEntity:
         return newx
 
     def ParseOKP(self, x):
-        idx = self.obj.index(x)
-        v = ''.join([self.obj[idx],',',self.obj[idx+1]])[:-3]
-        print(v)
-        input('okp')
+        pt=r'Oryginalna kwota operacji: \d+'
+        v=None
+        try:
+            l=list(filter(None, [regex.search(pt, i) for i in self.obj]))
+            if len(l) != 1:
+                raise Exception('[!] More elements than one as "Oryginalna kwota operacji:..."')
+            l = l[0].group()
+            idx = self.obj.index(l)+1
+            v = x + ',' + self.obj[idx][:-4]
+            v = float(v.replace(',','.',1))
+        except Exception as e:
+            print(e)
         return v
 
     def ParseDateTime(self, x):
@@ -54,10 +64,11 @@ class OpisTransakcjiEntity:
     def ParseRachunek(self, x):
         newx = ''.join(x.split())
         if len(newx) > 26:
-            raise Exception(f'Account number has too long length. {newx}')
+            raise Exception(f'[!] Account number has too long length. {newx}')
         return newx
 
     def PrepareObject(self):
+        """ Create object from list, through using function or names of tables, which are written down in special dictionary OTF. """
         if self.prepare == True:
             return 0
         obj = {}
@@ -72,9 +83,9 @@ class OpisTransakcjiEntity:
                     else:
                         klucz = self.OTF[name][0](self, name)
                     try:
-                        wartosc = item.split(':', 1)[1].strip()
-                        wartosc = self.OTF[name][1](self, wartosc)
+                        wartosc = self.OTF[name][1](self, item.split(':', 1)[1].strip())
                     except IndexError:
+                        # That error popped up, where there is no second value for OTF.
                         wartosc = item.split(':', 1)[1].strip()
                     if klucz != '':
                         obj.update({klucz : wartosc})
@@ -106,15 +117,12 @@ class OpisTransakcjiEntity:
             conn.commit()
             self.saved = True
         except errors.IntegrityError as e:
-            print("[!] We got an error: {}".format(e))
+            print("[!] We got an error of integrity: {}".format(e))
         except Exception as e:
-            print("[!] Antoher error: {}".format(e))
+            print("[!] Another error: {}".format(e))
         finally:
             cur.close()
             conn.close()
-
-        
-
 
     """ Opis transakcji fields
     " Obiekt automatyzujący przetwarzanie
