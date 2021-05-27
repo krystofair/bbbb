@@ -95,6 +95,8 @@ class OpisTransakcjiEntity:
         self.obj = obj
         self.prepare = True
         if len(pominiete_pola) != 0:
+            print('[i] None of this fields was assign.')
+            print('[i] Field show with this style: "45 PLN" is normal behaviour B)')
             print(pominiete_pola)
 
     def SaveToDB(self, transakcja):

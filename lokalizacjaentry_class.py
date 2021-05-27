@@ -1,7 +1,6 @@
 from mysqlx import errors
 import regex
 
-
 class LokalizacjaEntity():
     def __init__(self, obj, db):
         self.obj = obj
@@ -10,11 +9,10 @@ class LokalizacjaEntity():
     
     def ParseFuther(self):
         if 'Adres' in self.obj:
-            if 'http' in self.obj['Adres']:
+            new_adres_value = regex.search(r'(www[.])?(?<adres>(\w*[.])*\w*[.]\w{2,3})', self.obj['Adres'])
+            if new_adres_value is not None:
                 # pull only domain.
-                new_adres_value = regex.search(r'(www[.])?(?<adres>(\w*[.])*\w*[.]\w{2,3})', self.obj['Adres'])
-                if new_adres_value is not None:
-                    self.obj.update(Adres=new_adres_value.group('adres'))
+                self.obj.update(Adres=new_adres_value.group('adres'))
                 self.obj.update(Kraj='INTERNET')
                 self.obj.update(Miasto=None)
                 
