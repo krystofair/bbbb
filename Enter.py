@@ -50,9 +50,10 @@ def pipnf(dane):
     return (total_gtz, total_ltz, total_gtz+total_ltz)
 
 
-# extract transakcja part and opis_transakcji part 
-# and pack this parts to one tuple.
-def cTrans(dane: dict):
+def cTrans(dane: dict) -> tuple:
+    """ Extract `transakcja` part and `opis_transakcji` part
+        and pack this parts to one tuple.
+    """
     ot = None  # opis transakcji list.
     values=[] # list to use in add entry to database.
     ot=dane.pop('Opis transakcji') # get opis transakcji list.
@@ -68,7 +69,7 @@ def cTrans(dane: dict):
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python {} filename.csv ...".format(sys.argv[0]))
-        exit(0)
+        sys.exit(0)
     sys.argv.pop(0)
     for arg in sys.argv:
         dane = parse(arg)

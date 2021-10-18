@@ -1,11 +1,11 @@
-from lokalizacjaentry_class import LokalizacjaEntity as LE
 import datetime
-import time
 import regex
-from mysqlx import errors
-from transakcjaentry_class import TransakcjaEntity as Tre
 
-import pdb
+from mysqlx import errors
+
+from transakcjaentry_class import TransakcjaEntity as Tre
+from lokalizacjaentry_class import LokalizacjaEntity as LE
+
 
 class OpisTransakcjiEntity:
 

@@ -6,7 +6,7 @@ class Mydb:
     HOST = '127.0.0.1'
     PORT = 3306
     DATABASE = 'Banking'
-    USER = 'krystof'
+    USER = 'root'
     PASSWD = ''
 
     @staticmethod
@@ -15,7 +15,7 @@ class Mydb:
 
     @staticmethod
     def PasswordPrompt():
-        return getpass.getpass(prompt= 'Enter password to database: ')
+        return getpass.getpass(prompt= f'Enter password to database for user {Mydb.USER}: ')
 
     @staticmethod
     def getDBConn():
