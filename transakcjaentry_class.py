@@ -6,7 +6,7 @@ class TransakcjaEntity:
         obj = list(obj)
         obj.append(id_opisu_transakcji)
         self.obj = tuple(obj)
-    
+
     def SaveToDB(self, connection):
         insert_stmt = (
             "INSERT INTO Transakcje(Data_operacji, Data_waluty, Typ_transakcji, "
@@ -21,7 +21,7 @@ class TransakcjaEntity:
             print('Error of integrity of data in db. Esssa')
         except Exception as ex:
             print(f"[!] We got an error: {ex}")
-            raise ex # for propagation the error futher.
+            raise ex  # for propagation the error futher.
         finally:
             cur.close()
         return li

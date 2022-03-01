@@ -5,6 +5,7 @@ from opistransakcjientry_class import OpisTransakcjiEntity as Ote
 from MyDataBaseConsts import Mydb as mdbc
 from transakcjaentry_class import TransakcjaEntity as Te
 
+
 mdbc.SetPassword() # podaj haslo do bazy
 
 
@@ -23,9 +24,11 @@ def parse(filename):
 
     # Process file futher.
     with open(filename, "r") as CSV_All:
-        rrr = csv.DictReader(CSV_All, fieldnames=fields, restkey='Opis transakcji', dialect='unix', delimiter=',', quoting=csv.QUOTE_NONE, escapechar='\\', doublequote=True, quotechar='"')
+        rrr = csv.DictReader(CSV_All, fieldnames=fields, restkey='Opis transakcji',
+                             dialect='unix', delimiter=',', quoting=csv.QUOTE_NONE,
+                             escapechar='\\', doublequote=True, quotechar='"')
         data = []
-        next(rrr)
+        next(rrr) 
         for row in rrr:
             for k in row.keys():
                 try:
@@ -39,8 +42,9 @@ def parse(filename):
 
 
 def pipnf(dane):
-    total_gtz=0
-    total_ltz=0
+    """ Deprecated, cause this is do in database procedure """
+    total_gtz = 0
+    total_ltz = 0
     for d in dane:
         if True in ['fortuna' in x.lower() for x in d['Opis transakcji']]:
             if float(d['Kwota']) < 0:
@@ -52,11 +56,10 @@ def pipnf(dane):
 
 def cTrans(dane: dict) -> tuple:
     """ Extract `transakcja` part and `opis_transakcji` part
-        and pack this parts to one tuple.
-    """
+        and pack this parts to one tuple.  """
     ot = None  # opis transakcji list.
-    values=[] # list to use in add entry to database.
-    ot=dane.pop('Opis transakcji') # get opis transakcji list.
+    values = []  # list to use in add entry to database.
+    ot = dane.pop('Opis transakcji') # get opis transakcji list.
     for di in dane:
         if 'saldo' in di.lower() or 'kwota' in di.lower():
             values.append(float(dane[di]))

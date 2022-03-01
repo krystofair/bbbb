@@ -68,7 +68,9 @@ class OpisTransakcjiEntity:
         return newx
 
     def PrepareObject(self):
-        """ Create object from list, through using function or names of tables, which are written down in special dictionary OTF. """
+        """ Create object from list,
+            through using function or names of tables,
+            which are written down in special dictionary OTF.  """
         if self.prepare == True:
             return 0
         obj = {}
@@ -78,7 +80,7 @@ class OpisTransakcjiEntity:
             wartosc = None
             for name in self.OTF:
                 if name.lower() in item.lower():
-                    if type(self.OTF[name][0]) is str:
+                    if isinstance(self.OTF[name][0], str):
                         klucz = self.OTF[name][0]
                     else:
                         klucz = self.OTF[name][0](self, name)
@@ -126,12 +128,11 @@ class OpisTransakcjiEntity:
             cur.close()
             conn.close()
 
-    """ Opis transakcji fields
-    " Obiekt automatyzujący przetwarzanie
-    " Każda wartość dla odpowiedniego klucza zawiera krotkę,
-    " w której są dwa pola, 1. pole jest napisem albo funkcja
-    " drugie jest puste albo zawiera funkcję parsującą wartość z pierwszego obiektu
-    """
+    """ pola od tabeli "Opis transakcji"
+        Obiekt automatyzujący przetwarzanie
+        Każda wartość dla odpowiedniego klucza zawiera krotkę,
+        w której są dwa pola, pierwsze pole jest napisem reprezentującym nazwę pola w bazie,
+        drugie jest puste lub zawiera funkcję parsującą wartość z pierwszego obiektu """
     OTF = {
             'Nazwa nadawcy' : ('Nazwa_nadawcy',), # -> Nazwa_nadawcy
             'Rachunek odbiorcy' : ('Rachunek_odbiorcy', ParseRachunek),

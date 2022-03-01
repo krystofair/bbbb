@@ -5,7 +5,7 @@ import mysql
 class Mydb:
     HOST = '127.0.0.1'
     PORT = 3306
-    DATABASE = 'Banking'
+    DATABASE = 'banking'
     USER = 'root'
     PASSWD = ''
 
