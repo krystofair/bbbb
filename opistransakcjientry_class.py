@@ -38,6 +38,7 @@ class OpisTransakcjiEntity:
 
     def ParseDateTime(self, x):
         dataiczas = r'(?P<rok>\d{4})-(?P<miesiac>\d{2})-(?P<dzien>\d{2}) (?P<godz>\d{2}):(?P<min>\d{2}):(?P<sek>\d{2})'
+        only_date = r'(?P<rok>\d{4})-(?P<miesiac>\d{2})-(?P<dzien>\d{2})'
         dcc = regex.compile(dataiczas)
         mo = dcc.search(x)
         if mo:
@@ -48,6 +49,18 @@ class OpisTransakcjiEntity:
                 )
             except:
                 print('[!] Cos nie tak z parsowaniem znacznika czasowego')
+            return dc
+        elif regex.search(only_date, x):
+            print("[i] Time in DateTime was empty")
+            # In case We have only date, time will be set at midnight.
+            mo = regex.search(only_date, x)
+            try:
+                dc = datetime.datetime(
+                    int(mo.group('rok')), int(mo.group('miesiac')), int(mo.group('dzien')),
+                    0, 0, 0)
+            except Exception as e:
+                print('[!] Error with parsing date.')
+                print('[!] {}'.format(e))
             return dc
         else:
             print('[!] Error Date & Time is empty')
