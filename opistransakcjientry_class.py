@@ -50,7 +50,8 @@ class OpisTransakcjiEntity:
                 print('[!] Cos nie tak z parsowaniem znacznika czasowego')
             return dc
         else:
-            print('[!] error mo is empty')
+            print('[!] Error Date & Time is empty')
+            print('[i] That is how look parameter to parse: {}'.format(x))
             return None
 
     def ParseLokalizacja(self, x):
