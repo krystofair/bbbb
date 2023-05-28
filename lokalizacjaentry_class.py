@@ -10,14 +10,14 @@ class LokalizacjaEntity():
     def ParseFuther(self):
         if 'Adres' in self.obj:
             new_adres_value = regex.search(r'(www[.])?(?<adres>(\w*[.])*\w*[.]\w{2,3})', self.obj['Adres'])
-            if new_adres_value is not None:
+            if new_adres_value:
                 # pull only domain.
                 self.obj.update(Adres=new_adres_value.group('adres'))
                 self.obj.update(Kraj='INTERNET')
                 self.obj.update(Miasto=None)
                 
     def SaveToDB(self):
-        if self.saved != False:
+        if self.saved:
             return 0
         conn = self.db.getDBConn()
         cur = conn.cursor()
@@ -32,25 +32,24 @@ class LokalizacjaEntity():
                 values.append(self.obj[pole])
             except KeyError:
                 values.append('NULL')
-        newid = self.GetLastIDFromDB(cur)+1
+        newid = self.GetLastIDFromDB(cur) + 1
         values.insert(0, newid)
         try:
             cur.execute(insert_stmt, tuple(values))
             conn.commit()
             self.saved = True
         except errors.IntegrityError as err:
-            print('[!] We got an error: {}'.format(err))
+            print(f'[!] We got an error: {err}')
         finally:
             cur.close()
             conn.close()
         return newid
-        
 
     def GetLastIDFromDB(self, cur):
         query = 'SELECT ID FROM Lokalizacje ORDER BY 1 DESC LIMIT 1;'
         cur.execute(query)
         last_id = cur.fetchone()
-        if last_id is None or last_id == ():
+        if not last_id:
             return 0
         else:
             return last_id[0]
@@ -59,7 +58,7 @@ class LokalizacjaEntity():
         conn = self.db.getDBConn()
         cur = conn.cursor()
         self.ParseFuther()
-        if self.obj['Miasto'] == None:
+        if not self.obj['Miasto']:
             query = f"""
                 SELECT ID FROM Lokalizacje
                 WHERE Kraj LIKE ('%{self.obj['Kraj']}%')
@@ -75,17 +74,17 @@ class LokalizacjaEntity():
         try:
             cur.execute(query)
             t = cur.fetchall()
-            if t != [] and t is not None:
+            if t:
                 t = t[0][0] # only ID.
             else:
                 t = 0
         except errors.Error as e:
-            print('[!] Some fucking error.')
-            print(str(e))
+            print('[!] Some error occured.')
+            print(e)
         finally:
             cur.close()
         return t
-    
+
     # Process Location String :D
     # This return object Location to database
     @staticmethod
@@ -112,9 +111,3 @@ class LokalizacjaEntity():
             lok.update({pole : wartosc})
             xx = xx[b+1:]
         return lok
-
-
-
-
-
-

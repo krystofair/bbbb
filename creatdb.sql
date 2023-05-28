@@ -49,8 +49,6 @@ CREATE TABLE Transakcje (
 );
 
 
-
-
 -- CREATE TABLE OpisyTransakcji (
 -- 	ID INTEGER PRIMARY KEY AUTO_INCREMENT, -- id obiektu -- 
 -- 	Data_i_czas_operacji TIMESTAMP UNIQUE, -- primary key bo nie da się wykonać w tym samym czasie dwóch transakcji, problem ze nie ma tego czasem w danych XD --
@@ -68,6 +66,3 @@ CREATE TABLE Transakcje (
 -- 	Nr_referencyjny VARCHAR(255), -- nie wiem nawet co to jest :kappa: --
 -- 	CONSTRAINT FOREIGN KEY (Lokalizacja) REFERENCES Lokalizacje(ID)
 -- );
-
-
-

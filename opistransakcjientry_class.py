@@ -60,11 +60,11 @@ class OpisTransakcjiEntity:
                     0, 0, 0)
             except Exception as e:
                 print('[!] Error with parsing date.')
-                print('[!] {}'.format(e))
+                print(f'[!] {e}')
             return dc
         else:
             print('[!] Error Date & Time is empty')
-            print('[i] That is how look parameter to parse: {}'.format(x))
+            print(f'[i] That is how look parameter to parse: {x}')
             return None
 
     def ParseLokalizacja(self, x):
@@ -85,7 +85,7 @@ class OpisTransakcjiEntity:
         """ Create object from list,
             through using function or names of tables,
             which are written down in special dictionary OTF.  """
-        if self.prepare == True:
+        if self.prepare:
             return 0
         obj = {}
         pominiete_pola = []
@@ -103,28 +103,28 @@ class OpisTransakcjiEntity:
                     except IndexError:
                         # That error popped up, where there is no second value for OTF.
                         wartosc = item.split(':', 1)[1].strip()
-                    if klucz != '':
+                    if klucz:
                         obj.update({klucz : wartosc})
                     break
             else:
-                pominiete_pola.append(item) if item != '' else None
+                if item:
+                    pominiete_pola.append(item)
         self.obj = obj
         self.prepare = True
-        if len(pominiete_pola) != 0:
+        if pominiete_pola:
             print('[i] None of this fields was assign.')
             print('[i] Field show with this style: "45 PLN" is normal behaviour B)')
             print(pominiete_pola)
 
     def SaveToDB(self, transakcja):
-        if self.saved == True:
+        if self.saved:
             return 0
-        if self.prepare == False:
+        if not self.prepare:
             self.PrepareObject()
             self.prepare = True
         conn = self.db.getDBConn()
         cur = conn.cursor()
         try:
-            
             ins_stmt = (
                 "INSERT INTO OpisyTransakcji("+', '.join([str(k) for k in self.obj.keys()])+') '
                 "VALUES (" + ','.join(['%s' for i in self.obj.keys()]) + ');'
@@ -135,9 +135,9 @@ class OpisTransakcjiEntity:
             conn.commit()
             self.saved = True
         except errors.IntegrityError as e:
-            print("[!] We got an error of integrity: {}".format(e))
+            print(f"[!] We got an error of integrity: {e}")
         except Exception as e:
-            print("[!] Another error: {}".format(e))
+            print(f"[!] Another error: {e}")
         finally:
             cur.close()
             conn.close()
